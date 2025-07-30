@@ -1,0 +1,50 @@
+﻿================================================================================
+Web API Test Execution Log
+Generated: 2025-07-30 19:42:47
+Machine: DESKTOP-93H19L3
+User: win10
+OS: Microsoft Windows NT 10.0.19045.0
+.NET Runtime: 9.0.7
+Working Directory: D:\James\PayoneerSubmission\Web_API_Test\bin\Debug\net9.0
+================================================================================
+
+[19:42:47.495] === FUNCTION TEST INITIALIZATION ===
+[19:42:47.498] Test Method: GetAllTodoItemsEndpointTest
+[19:42:47.498] Building configuration from appsettings files...
+[19:42:47.498] Using API base URL: http://localhost:5089
+[19:42:47.498] Creating HttpClient for API testing...
+[19:42:47.503] Verifying API connectivity...
+[19:42:47.890] API connectivity verified successfully. Status: OK
+[19:42:47.890] Function test initialization completed successfully.
+[19:42:47.890] Test logs will be saved to: D:\James\PayoneerSubmission\Web_API_Test\TestLogs\Web_API_Function_Test_GetAllTodoItemsEndpointTest_20250730_194247.log
+[19:42:47.890] ==========================================
+[19:42:47.907] === Starting GetAllTodoItemsEndpointTest ===
+[19:42:47.907] Retrieving all TodoItems from the database...
+[19:42:47.938] Current number of TodoItems in database: 3
+[19:42:47.938] Creating a new TodoItem to add to the database...
+[19:42:47.939] New TodoItem details - Name: 'Newly added Todo Item', IsComplete: False
+[19:42:47.966] Response Body: {"id":489,"name":"Newly added Todo Item","isComplete":false}
+[19:42:47.967] ====================
+[19:42:47.976] Successfully created TodoItem with ID: 489
+[19:42:47.976] Verifying the new TodoItem was added to the database...
+[19:42:47.978] Database now contains 4 items (expected: 4)
+[19:42:47.983] Verification successful - TodoItem found with correct properties
+[19:42:47.983] Cleaning up: Deleting the newly created TodoItem with ID: 489
+[19:42:47.987] Successfully deleted TodoItem with ID: 489
+[19:42:47.987] GetAllTodoItemsEndpointTest completed successfully.
+[19:42:47.987] ============================================
+[19:42:47.988] 
+[19:42:47.988] TEST RESULT: GetAllTodoItemsEndpointTest
+[19:42:47.988] Status: PASSED
+[19:42:48.001] Duration: 80.27 ms
+[19:42:48.001] Completed at: 2025-07-30 19:42:48
+[19:42:48.001] --------------------------------------------------
+[19:42:48.004] === FUNCTION TEST CLEANUP ===
+[19:42:48.004] Disposing HttpClient and cleaning up resources...
+[19:42:48.006] Complete test log saved to: D:\James\PayoneerSubmission\Web_API_Test\TestLogs\Web_API_Function_Test_GetAllTodoItemsEndpointTest_20250730_194247.log
+[19:42:48.006] Cleanup completed successfully.
+[19:42:48.006] ==============================
+
+================================================================================
+Test Session Completed: 2025-07-30 19:42:48
+================================================================================

@@ -1,0 +1,58 @@
+﻿================================================================================
+Web API Test Execution Log
+Generated: 2025-07-30 18:06:08
+Machine: DESKTOP-93H19L3
+User: win10
+OS: Microsoft Windows NT 10.0.19045.0
+.NET Runtime: 9.0.7
+Working Directory: D:\James\PayoneerSubmission\Web_API_Test\bin\Debug\net9.0
+================================================================================
+
+[18:06:08.202] === PERFORMANCE TEST INITIALIZATION ===
+[18:06:08.204] Test Method: GetTodoItemByIDPerformanceLoadTest
+[18:06:08.204] Building configuration from appsettings files...
+[18:06:08.204] Using API base URL: http://localhost:5089
+[18:06:08.205] Creating HttpClient for API testing...
+[18:06:08.206] HttpClient configured with base address: http://localhost:5089/
+[18:06:08.206] Verifying API connectivity...
+[18:06:08.375] API connectivity verified successfully. Status: OK
+[18:06:08.375] Performance test initialization completed successfully.
+[18:06:08.375] Test logs will be saved to: D:\James\PayoneerSubmission\Web_API_Test\bin\Debug\net9.0\TestLogs\Web_API_Performance_Test_GetTodoItemByIDPerformanceLoadTest_20250730_180608.log
+[18:06:08.375] ============================================
+[18:06:08.379] === Starting GetTodoItemByID Performance Load Test ===
+[18:06:08.379] Starting performance test with 10000 requests...
+[18:06:10.281] ✓ Completed 1000 requests... Success rate: 100.00%
+[18:06:11.885] ✓ Completed 2000 requests... Success rate: 100.00%
+[18:06:13.445] ✓ Completed 3000 requests... Success rate: 100.00%
+[18:06:14.907] ✓ Completed 4000 requests... Success rate: 100.00%
+[18:06:16.439] ✓ Completed 5000 requests... Success rate: 100.00%
+[18:06:18.100] ✓ Completed 6000 requests... Success rate: 100.00%
+[18:06:19.621] ✓ Completed 7000 requests... Success rate: 100.00%
+[18:06:21.211] ✓ Completed 8000 requests... Success rate: 100.00%
+[18:06:22.727] ✓ Completed 9000 requests... Success rate: 100.00%
+[18:06:24.252] ✓ Completed 10000 requests... Success rate: 100.00%
+[18:06:24.252] === PERFORMANCE TEST RESULTS ===
+[18:06:24.252] Total Requests: 10000
+[18:06:24.252] Successful Requests: 10000
+[18:06:24.252] Failed Requests: 0
+[18:06:24.252] Total Duration: 15873.15 ms
+[18:06:24.252] Average Response Time: 1.59 ms per request
+[18:06:24.252] Requests per Second: 629.99
+[18:06:24.252] ================================
+[18:06:24.266] GetTodoItemByIDPerformanceLoadTest completed successfully.
+[18:06:24.266] 
+[18:06:24.266] TEST RESULT: GetTodoItemByIDPerformanceLoadTest
+[18:06:24.266] Status: PASSED
+[18:06:24.266] Duration: 15887.40 ms
+[18:06:24.266] Error: Success Rate: 100.00%, Avg Response: 1.59ms
+[18:06:24.266] Completed at: 2025-07-30 18:06:24
+[18:06:24.266] --------------------------------------------------
+[18:06:24.268] === PERFORMANCE TEST CLEANUP ===
+[18:06:24.268] Disposing HttpClient and cleaning up resources...
+[18:06:24.268] Complete test log saved to: D:\James\PayoneerSubmission\Web_API_Test\bin\Debug\net9.0\TestLogs\Web_API_Performance_Test_GetTodoItemByIDPerformanceLoadTest_20250730_180608.log
+[18:06:24.269] Cleanup completed successfully.
+[18:06:24.269] =================================
+
+================================================================================
+Test Session Completed: 2025-07-30 18:06:24
+================================================================================

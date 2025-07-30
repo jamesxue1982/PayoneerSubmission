@@ -1,0 +1,160 @@
+﻿================================================================================
+Web API Test Execution Log
+Generated: 2025-07-30 17:58:49
+Machine: DESKTOP-93H19L3
+User: win10
+OS: Microsoft Windows NT 10.0.19045.0
+.NET Runtime: 9.0.7
+Working Directory: D:\James\PayoneerSubmission\Web_API_Test\bin\Debug\net9.0
+================================================================================
+
+[17:58:49.838] === FUNCTION TEST INITIALIZATION ===
+[17:58:49.840] Building configuration from appsettings files...
+[17:58:49.840] Using API base URL: http://localhost:5089
+[17:58:49.840] Creating HttpClient for API testing...
+[17:58:49.842] Verifying API connectivity...
+[17:58:50.001] API connectivity verified successfully. Status: OK
+[17:58:50.001] Function test initialization completed successfully.
+[17:58:50.001] Test logs will be saved to: D:\James\PayoneerSubmission\Web_API_Test\bin\Debug\net9.0\TestLogs\Web_API_Function_Test_20250730_175849.log
+[17:58:50.001] ==========================================
+[17:58:50.009] === Starting AddTodoItemEndpointTest ===
+[17:58:50.009] Initialized list to track created item IDs for cleanup
+[17:58:50.009] TEST 1: Adding TodoItem with ID = 0 (integer)...
+[17:58:50.009] Request payload: Name='Test adding with id is integer 0', IsComplete=False, ID=0
+[17:58:50.032] Response Body: {"id":331,"name":"Test adding with id is integer 0","isComplete":false}
+[17:58:50.033] ====================
+[17:58:50.054] ✓ Successfully created TodoItem with auto-generated ID: 331
+[17:58:50.054] TEST 2: Adding TodoItem with ID = '0' (string)...
+[17:58:50.054] Request payload: Name='The item with id is string 0', IsComplete=False, ID='0'
+[17:58:50.058] Response Body: {"id":332,"name":"The item with id is string 0","isComplete":false}
+[17:58:50.058] ====================
+[17:58:50.059] ✓ Successfully created TodoItem with ID: 332 (expected: 332)
+[17:58:50.059] TEST 3: Adding TodoItem with specific ID value...
+[17:58:50.059] Request payload: Name='An item with a given ID', IsComplete=False, ID=333
+[17:58:50.063] Response Body: {"id":333,"name":"An item with a given ID","isComplete":false}
+[17:58:50.063] ====================
+[17:58:50.063] ✓ Successfully created TodoItem with specified ID: 333
+[17:58:50.063] TEST 4: Adding TodoItem with no ID property...
+[17:58:50.064] Request payload: Name='Item with no id property', IsComplete=True, ID=<not provided>
+[17:58:50.086] Response Body: Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23505: 重复键违反唯一约束"PK_TodoItems"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.<ReadMessage>g__ReadMessageLong|233_0(NpgsqlConnector connector, Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(CommandBehavior behavior, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(CommandBehavior behavior, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: 错误
+    SqlState: 23505
+    MessageText: 重复键违反唯一约束"PK_TodoItems"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: TodoItems
+    ConstraintName: PK_TodoItems
+    File: nbtinsert.c
+    Line: 673
+    Routine: _bt_check_unique
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at TodoApi.Controllers.TodoItemsController.PostTodoItem(TodoItem todoItem) in D:\James\PayoneerSubmission\Web_API_Demo-main\TestWebApi_Demo\Controllers\TodoItemsController.cs:line 99
+   at lambda_method35(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+
+HEADERS
+=======
+Connection: keep-alive
+Host: localhost:5089
+Content-Type: application/json
+Content-Length: 65
+
+[17:58:50.086] ====================
+[17:58:50.086] ⚠ Note: This test has an unresolved issue - works in Postman but not in automated test
+[17:58:50.086] TEST 5: Adding TodoItem with no Name property...
+[17:58:50.086] Request payload: aProperty='Item with no name property', IsComplete=True, ID=335
+[17:58:50.090] Response Body: {"id":335,"name":null,"isComplete":true}
+[17:58:50.090] ====================
+[17:58:50.090] ✓ Successfully created TodoItem with ID: 335, Name automatically set to null
+[17:58:50.090] TEST 6: Adding TodoItem with no IsComplete property...
+[17:58:50.090] Request payload: Name='Item with no Complete property', notComplete=True, ID=336
+[17:58:50.093] Response Body: {"id":336,"name":"Item with no Complete property","isComplete":false}
+[17:58:50.093] ====================
+[17:58:50.094] ✓ Successfully created TodoItem with ID: 336, IsComplete automatically set to false
+[17:58:50.094] TEST 7: Adding TodoItem with maximum long value as ID...
+[17:58:50.094] Request payload: Name='Item with maximum long ID', isComplete=True, ID=9223372036854775807 (Int64.MaxValue)
+[17:58:50.099] Response Body: {"id":9223372036854775807,"name":"Item with maximum long ID","isComplete":true}
+[17:58:50.099] ====================
+[17:58:50.099] ✓ Successfully created TodoItem with maximum long ID: 9223372036854775807
+[17:58:50.099] TEST 8: Adding TodoItem with invalid oversized ID value...
+[17:58:50.101] Request payload: ID='99999999999999999999999999' (oversized), Name length=15000 chars
+[17:58:50.103] ✓ Correctly rejected oversized ID with BadRequest status
+[17:58:50.103] TEST 9: Adding TodoItem with very long name...
+[17:58:50.103] Request payload: Name length=15000 chars, ID=337
+[17:58:50.106] Response Body: {"id":337,"name":"Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name Very long name ","isComplete":true}
+[17:58:50.111] ====================
+[17:58:50.117] ✓ Successfully created TodoItem with very long name, ID: 337
+[17:58:50.117] TEST 10: Adding empty TodoItem object...
+[17:58:50.117] Request payload: {} (empty object)
+[17:58:50.120] ✓ Empty object 334 accepted with Created status (API handles gracefully)
+[17:58:50.120] TEST 11: Adding TodoItem with existing ID (conflict test)...
+[17:58:50.120] Request payload: Name='Item with existing ID', ID=331 (existing)
+[17:58:50.138] ✓ Correctly rejected duplicate ID with InternalServerError status
+[17:58:50.138] TEST 12: Adding TodoItem with ID as word (security test)...
+[17:58:50.138] Request payload: Name='Item with id as a word instead of a number', ID='ABC' (non-numeric)
+[17:58:50.140] ✓ Correctly rejected non-numeric ID with BadRequest status
+[17:58:50.140] TEST 13: SQL injection attempt in ID field (security test)...
+[17:58:50.140] Request payload: ID='1 OR 1=1; DROP TABLE TodoItems; --' (SQL injection attempt)
+[17:58:50.141] ✓ Successfully blocked SQL injection attempt with BadRequest status
+[17:58:50.141] TEST 14: Adding TodoItem with null values...
+[17:58:50.141] Request payload: All properties set to null
+[17:58:50.146] ✓ Correctly rejected null values with BadRequest status
+[17:58:50.146] TEST 15: Invalid content type test (security test)...
+[17:58:50.148] ✓ Correctly rejected invalid content type with UnsupportedMediaType status
+[17:58:50.148] Cleanup: Deleting 8 created TodoItems...
+[17:58:50.148] Deleting TodoItem with ID: 331
+[17:58:50.152] Deleting TodoItem with ID: 332
+[17:58:50.156] Deleting TodoItem with ID: 333
+[17:58:50.159] Deleting TodoItem with ID: 335
+[17:58:50.162] Deleting TodoItem with ID: 336
+[17:58:50.167] Deleting TodoItem with ID: 9223372036854775807
+[17:58:50.171] Deleting TodoItem with ID: 337
+[17:58:50.174] Deleting TodoItem with ID: 334
+[17:58:50.178] ✓ Successfully deleted all 8 test items
+[17:58:50.178] AddTodoItemEndpointTest completed successfully.
+[17:58:50.178] ===============================================
+[17:58:50.180] === FUNCTION TEST CLEANUP ===
+[17:58:50.180] Disposing HttpClient and cleaning up resources...
+[17:58:50.182] Complete test log saved to: D:\James\PayoneerSubmission\Web_API_Test\bin\Debug\net9.0\TestLogs\Web_API_Function_Test_20250730_175849.log
+[17:58:50.182] Cleanup completed successfully.
+[17:58:50.182] ==============================
+
+================================================================================
+Test Session Completed: 2025-07-30 17:58:50
+================================================================================

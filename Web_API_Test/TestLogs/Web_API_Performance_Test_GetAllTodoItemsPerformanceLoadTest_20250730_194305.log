@@ -1,0 +1,51 @@
+﻿================================================================================
+Web API Test Execution Log
+Generated: 2025-07-30 19:43:05
+Machine: DESKTOP-93H19L3
+User: win10
+OS: Microsoft Windows NT 10.0.19045.0
+.NET Runtime: 9.0.7
+Working Directory: D:\James\PayoneerSubmission\Web_API_Test\bin\Debug\net9.0
+================================================================================
+
+[19:43:05.416] === PERFORMANCE TEST INITIALIZATION ===
+[19:43:05.416] Test Method: GetAllTodoItemsPerformanceLoadTest
+[19:43:05.416] Building configuration from appsettings files...
+[19:43:05.416] Using API base URL: http://localhost:5089
+[19:43:05.416] Creating HttpClient for API testing...
+[19:43:05.417] HttpClient configured with base address: http://localhost:5089/
+[19:43:05.417] Verifying API connectivity...
+[19:43:05.419] API connectivity verified successfully. Status: OK
+[19:43:05.419] Performance test initialization completed successfully.
+[19:43:05.419] Test logs will be saved to: D:\James\PayoneerSubmission\Web_API_Test\TestLogs\Web_API_Performance_Test_GetAllTodoItemsPerformanceLoadTest_20250730_194305.log
+[19:43:05.419] ============================================
+[19:43:05.423] === Starting GetAllTodoItems Performance Load Test ===
+[19:43:05.423] Starting performance test with 10000 GET requests to retrieve all TodoItems...
+[19:43:05.423] Act - Query the /api/todoitems endpoint 10,000 times
+[19:43:06.515] Completed 1000 GET requests... (Success rate so far: 100.0%)
+[19:43:07.287] Completed 2000 GET requests... (Success rate so far: 100.0%)
+[19:43:08.090] Completed 3000 GET requests... (Success rate so far: 100.0%)
+[19:43:08.808] Completed 4000 GET requests... (Success rate so far: 100.0%)
+[19:43:09.597] Completed 5000 GET requests... (Success rate so far: 100.0%)
+[19:43:10.336] Completed 6000 GET requests... (Success rate so far: 100.0%)
+[19:43:11.089] Completed 7000 GET requests... (Success rate so far: 100.0%)
+[19:43:11.856] Completed 8000 GET requests... (Success rate so far: 100.0%)
+[19:43:12.601] Completed 9000 GET requests... (Success rate so far: 100.0%)
+[19:43:13.516] Completed 10000 GET requests... (Success rate so far: 100.0%)
+[19:43:13.517] === PERFORMANCE TEST RESULTS ===
+[19:43:13.517] Total Requests: 10000
+[19:43:13.517] Successful Requests: 10000
+[19:43:13.517] Failed Requests: 0
+[19:43:13.517] Total Duration: 8093.53 ms
+[19:43:13.517] Average Response Time: 0.81 ms per request
+[19:43:13.517] Requests per Second: 1235.55
+[19:43:13.517] ================================
+[19:43:13.517] === PERFORMANCE TEST CLEANUP ===
+[19:43:13.517] Disposing HttpClient and cleaning up resources...
+[19:43:13.517] Complete test log saved to: D:\James\PayoneerSubmission\Web_API_Test\TestLogs\Web_API_Performance_Test_GetAllTodoItemsPerformanceLoadTest_20250730_194305.log
+[19:43:13.517] Cleanup completed successfully.
+[19:43:13.517] =================================
+
+================================================================================
+Test Session Completed: 2025-07-30 19:43:13
+================================================================================

@@ -73,7 +73,7 @@ public class ShoppingCartTests
     [TestCleanup]
     public async Task TestCleanup()
     {
-        TestContext.WriteLine("Cleaning up test environment...");
+        _testLogger.WriteLine("Cleaning up test environment...");
         
         if (_page != null)
         {
@@ -96,7 +96,10 @@ public class ShoppingCartTests
         _playwright?.Dispose();
         _playwright = null;
         
-        TestContext.WriteLine("Test environment cleaned up successfully.");
+        _testLogger.WriteLine("Test environment cleaned up successfully.");
+        
+        // Finalize the log file
+        _testLogger?.FinalizeLog();
     }
 
     /// <summary>
@@ -119,8 +122,10 @@ public class ShoppingCartTests
         _testLogger.WriteLine("Test started: AOS_AddToCart_PriceValidation");
 
         // Navigate to the Advantage Online Shopping website
+        _testLogger.WriteLine($"Navigating to: {TestConfiguration.Instance.BaseUrl}");
         await _page!.GotoAsync(TestConfiguration.Instance.BaseUrl);
         await Assertions.Expect(_page).ToHaveTitleAsync(new Regex("Advantage Shopping"));
+        _testLogger.WriteLine("Successfully navigated to AOS website and verified title");
 
 
         // Add required products to the cart
@@ -144,6 +149,7 @@ public class ShoppingCartTests
         // Get the shopping cart element and validate product count
         var shoppingCartDiv = _page.Locator(SHOPPING_CART_SELECTOR);
         var productRows = await shoppingCartDiv.Locator(PRODUCT_ROW_SELECTOR).CountAsync();
+        _testLogger.WriteLine($"Found {productRows} products in shopping cart");
         Assert.AreEqual(3, productRows, "Expected exactly 3 products in the cart");
 
         // Validate each product in the cart
@@ -173,6 +179,7 @@ public class ShoppingCartTests
 
                 Assert.AreEqual(laptop.Quantity, cartQuantity, $"Laptop quantity mismatch: expected {laptop.Quantity}, got {cartQuantity}");
                 Assert.AreEqual(laptop.TotalPrice, cartPrice, $"Laptop price mismatch: expected ${laptop.TotalPrice}, got ${cartPrice}");
+                _testLogger.WriteLine("✅ Laptop validation passed");
             }
             else if (productName.Equals(mouse.Model, StringComparison.OrdinalIgnoreCase))
             {
@@ -181,6 +188,7 @@ public class ShoppingCartTests
 
                 Assert.AreEqual(mouse.Quantity, cartQuantity, $"Mouse quantity mismatch: expected {mouse.Quantity}, got {cartQuantity}");
                 Assert.AreEqual(mouse.TotalPrice, cartPrice, $"Mouse price mismatch: expected ${mouse.TotalPrice}, got ${cartPrice}");
+                _testLogger.WriteLine("✅ Mouse validation passed");
             }
             else if (productName.Equals(tablet.Model, StringComparison.OrdinalIgnoreCase))
             {
@@ -189,9 +197,11 @@ public class ShoppingCartTests
 
                 Assert.AreEqual(tablet.Quantity, cartQuantity, $"Tablet quantity mismatch: expected {tablet.Quantity}, got {cartQuantity}");
                 Assert.AreEqual(tablet.TotalPrice, cartPrice, $"Tablet price mismatch: expected ${tablet.TotalPrice}, got ${cartPrice}");
+                _testLogger.WriteLine("✅ Tablet validation passed");
             }
             else
             {
+                _testLogger.WriteLine($"❌ Unexpected product found: {productName}");
                 Assert.Fail($"Unexpected product in cart: {productName}");
             }
         }
@@ -205,6 +215,7 @@ public class ShoppingCartTests
         _testLogger.WriteLine($"Cart total: {cartTotalPriceText} (${cartTotalPrice})");
 
         Assert.AreEqual(totalPrice, cartTotalPrice, "Overall cart total validation failed");
+        _testLogger.WriteLine("✅ Overall cart total validation passed - Test completed successfully!");
     }
 
     #region Helper Methods
@@ -239,22 +250,32 @@ public class ShoppingCartTests
     /// <returns>The updated product with price information</returns>
     private async Task<Product> AddProductToCartAsync(IPage page, string categoryName, Product product, string colorTitle)
     {
+        _testLogger.WriteLine($"  → Navigating to homepage for {product.Model}");
         await page.GotoAsync(TestConfiguration.Instance.BaseUrl);
 
+        _testLogger.WriteLine($"  → Clicking category: {categoryName}");
         await page.GetByRole(AriaRole.Link, new() { Name = categoryName, Exact = true }).ClickAsync();
+        
+        _testLogger.WriteLine($"  → Selecting product: {product.Model}");
         await page.GetByText(product.Model).ClickAsync();
+        
+        _testLogger.WriteLine($"  → Selecting color: {colorTitle}");
         await page.GetByTitle(colorTitle).ClickAsync();
 
         var priceText = await page.Locator(PRICE_SELECTOR).InnerTextAsync();
+        _testLogger.WriteLine($"  → Product price: {priceText}");
+        
+        _testLogger.WriteLine($"  → Setting quantity to: {product.Quantity}");
         await page.Locator(QUANTITY_INPUT_SELECTOR).FillAsync(product.Quantity.ToString());
 
         var updatedProduct = product;
         updatedProduct.IndividualPrice = ConvertToDecimal(priceText);
         updatedProduct.TotalPrice = updatedProduct.IndividualPrice * updatedProduct.Quantity;
 
+        _testLogger.WriteLine($"  → Adding to cart...");
         await page.GetByRole(AriaRole.Button, new() { Name = "ADD TO CART" }).ClickAsync();
 
-        TestContext.WriteLine($"Added {product.Model} - Qty: {product.Quantity}, Price: ${updatedProduct.IndividualPrice}, Total: ${updatedProduct.TotalPrice}");
+        _testLogger.WriteLine($"  ✅ Added {product.Model} - Qty: {product.Quantity}, Price: ${updatedProduct.IndividualPrice}, Total: ${updatedProduct.TotalPrice}");
         return updatedProduct;
     }
 
@@ -290,6 +311,8 @@ public struct Product
 public class TestLogger
 {
     private readonly TestContext? _testContext;
+    private readonly string _logFilePath;
+    private readonly object _lockObject = new();
 
     /// <summary>
     /// Initializes a new instance of the TestLogger class.
@@ -298,17 +321,99 @@ public class TestLogger
     public TestLogger(TestContext? testContext = null)
     {
         _testContext = testContext;
+        
+        // Create Logs directory in the project root (not in bin folder)
+        var projectRoot = GetProjectRootDirectory();
+        var logsDirectory = Path.Combine(projectRoot, "Logs");
+        Directory.CreateDirectory(logsDirectory);
+        
+        // Create log file with timestamp
+        var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+        var testName = testContext?.TestName ?? "Unknown";
+        var fileName = $"{testName}_{timestamp}.log";
+        _logFilePath = Path.Combine(logsDirectory, fileName);
+        
+        // Write initial log entry
+        WriteToFile($"=== Test Log Started: {DateTime.Now:yyyy-MM-dd HH:mm:ss} ===");
+        WriteToFile($"Test Name: {testName}");
+        WriteToFile($"Log File: {_logFilePath}");
+        WriteToFile("".PadRight(60, '='));
+    }
+    
+    /// <summary>
+    /// Gets the project root directory by looking for the .csproj file.
+    /// </summary>
+    /// <returns>The project root directory path</returns>
+    private static string GetProjectRootDirectory()
+    {
+        var currentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        var directory = new DirectoryInfo(currentDirectory);
+        
+        // Walk up the directory tree until we find a .csproj file
+        while (directory != null && !directory.GetFiles("*.csproj").Any())
+        {
+            directory = directory.Parent;
+        }
+        
+        // If we found a .csproj file, return that directory
+        if (directory != null)
+        {
+            return directory.FullName;
+        }
+        
+        // Fallback: try to find project root by looking for typical project files
+        directory = new DirectoryInfo(currentDirectory);
+        while (directory != null && 
+               !directory.GetFiles("*.sln").Any() && 
+               !directory.GetFiles("*.csproj").Any())
+        {
+            directory = directory.Parent;
+        }
+        
+        return directory?.FullName ?? currentDirectory;
     }
 
     /// <summary>
-    /// Writes a message to all available logging destinations (Console, TestContext, Debug).
+    /// Writes a message to all available logging destinations (Console, TestContext, Debug, and File).
     /// Ensures test output is visible across different environments and test runners.
     /// </summary>
     /// <param name="message">The message to log</param>
     public void WriteLine(string message)
     {
-        Console.WriteLine(message);           // Always log to console
-        _testContext?.WriteLine(message);     // Also log to MSTest if available
-        Debug.WriteLine(message);             // Also log to debug output
+        var timestampedMessage = $"[{DateTime.Now:HH:mm:ss.fff}] {message}";
+        
+        Console.WriteLine(timestampedMessage);           // Always log to console
+        _testContext?.WriteLine(timestampedMessage);     // Also log to MSTest if available
+        Debug.WriteLine(timestampedMessage);             // Also log to debug output
+        WriteToFile(timestampedMessage);                 // Also log to file
+    }
+    
+    /// <summary>
+    /// Writes a message directly to the log file with thread safety.
+    /// </summary>
+    /// <param name="message">The message to write to the file</param>
+    private void WriteToFile(string message)
+    {
+        try
+        {
+            lock (_lockObject)
+            {
+                File.AppendAllText(_logFilePath, message + Environment.NewLine);
+            }
+        }
+        catch (Exception ex)
+        {
+            // Log file writing failed, but don't break the test
+            Debug.WriteLine($"Failed to write to log file: {ex.Message}");
+        }
+    }
+    
+    /// <summary>
+    /// Finalizes the log file with test completion information.
+    /// </summary>
+    public void FinalizeLog()
+    {
+        WriteToFile("".PadRight(60, '='));
+        WriteToFile($"=== Test Log Ended: {DateTime.Now:yyyy-MM-dd HH:mm:ss} ===");
     }
 }

@@ -1,0 +1,54 @@
+﻿================================================================================
+Web API Test Execution Log
+Generated: 2025-07-30 19:43:29
+Machine: DESKTOP-93H19L3
+User: win10
+OS: Microsoft Windows NT 10.0.19045.0
+.NET Runtime: 9.0.7
+Working Directory: D:\James\PayoneerSubmission\Web_API_Test\bin\Debug\net9.0
+================================================================================
+
+[19:43:29.066] === PERFORMANCE TEST INITIALIZATION ===
+[19:43:29.066] Test Method: DeleteTodoItemPerformanceLoadTest
+[19:43:29.066] Building configuration from appsettings files...
+[19:43:29.066] Using API base URL: http://localhost:5089
+[19:43:29.066] Creating HttpClient for API testing...
+[19:43:29.066] HttpClient configured with base address: http://localhost:5089/
+[19:43:29.066] Verifying API connectivity...
+[19:43:29.069] API connectivity verified successfully. Status: OK
+[19:43:29.069] Performance test initialization completed successfully.
+[19:43:29.069] Test logs will be saved to: D:\James\PayoneerSubmission\Web_API_Test\TestLogs\Web_API_Performance_Test_DeleteTodoItemPerformanceLoadTest_20250730_194329.log
+[19:43:29.069] ============================================
+[19:43:29.078] === Starting DeleteTodoItem Performance Load Test ===
+[19:43:29.078] Starting performance test with 1000 requests...
+[19:43:29.078] Add a new TodoItem to the database for testing...
+[19:43:29.081] Successfully created TodoItem with ID: 498 for delete performance testing
+[19:43:29.223] Completed 100 create/delete cycles...
+[19:43:29.394] Completed 200 create/delete cycles...
+[19:43:29.588] Completed 300 create/delete cycles...
+[19:43:29.737] Completed 400 create/delete cycles...
+[19:43:29.869] Completed 500 create/delete cycles...
+[19:43:30.015] Completed 600 create/delete cycles...
+[19:43:30.208] Completed 700 create/delete cycles...
+[19:43:30.362] Completed 800 create/delete cycles...
+[19:43:30.499] Completed 900 create/delete cycles...
+[19:43:30.638] Completed 1000 create/delete cycles...
+[19:43:30.638] === DELETE PERFORMANCE TEST RESULTS ===
+[19:43:30.638] Total Create/Delete Cycles: 1000
+[19:43:30.638] Successful Deletions: 1000
+[19:43:30.638] Failed Deletions: 0
+[19:43:30.638] Total Duration: 1559.55 ms
+[19:43:30.638] Average Cycle Time: 1.56 ms per create/delete cycle
+[19:43:30.638] Cycles per Second: 641.21
+[19:43:30.638] Success Rate: 100.00%
+[19:43:30.638] ======================================
+[19:43:30.638] DeleteTodoItem Performance Load Test completed successfully.
+[19:43:30.638] === PERFORMANCE TEST CLEANUP ===
+[19:43:30.638] Disposing HttpClient and cleaning up resources...
+[19:43:30.638] Complete test log saved to: D:\James\PayoneerSubmission\Web_API_Test\TestLogs\Web_API_Performance_Test_DeleteTodoItemPerformanceLoadTest_20250730_194329.log
+[19:43:30.638] Cleanup completed successfully.
+[19:43:30.638] =================================
+
+================================================================================
+Test Session Completed: 2025-07-30 19:43:30
+================================================================================

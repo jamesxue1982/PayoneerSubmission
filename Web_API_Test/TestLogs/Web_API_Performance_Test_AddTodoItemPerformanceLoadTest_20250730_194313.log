@@ -1,0 +1,50 @@
+﻿================================================================================
+Web API Test Execution Log
+Generated: 2025-07-30 19:43:13
+Machine: DESKTOP-93H19L3
+User: win10
+OS: Microsoft Windows NT 10.0.19045.0
+.NET Runtime: 9.0.7
+Working Directory: D:\James\PayoneerSubmission\Web_API_Test\bin\Debug\net9.0
+================================================================================
+
+[19:43:13.527] === PERFORMANCE TEST INITIALIZATION ===
+[19:43:13.527] Test Method: AddTodoItemPerformanceLoadTest
+[19:43:13.527] Building configuration from appsettings files...
+[19:43:13.527] Using API base URL: http://localhost:5089
+[19:43:13.527] Creating HttpClient for API testing...
+[19:43:13.528] HttpClient configured with base address: http://localhost:5089/
+[19:43:13.528] Verifying API connectivity...
+[19:43:13.530] API connectivity verified successfully. Status: OK
+[19:43:13.530] Performance test initialization completed successfully.
+[19:43:13.530] Test logs will be saved to: D:\James\PayoneerSubmission\Web_API_Test\TestLogs\Web_API_Performance_Test_AddTodoItemPerformanceLoadTest_20250730_194313.log
+[19:43:13.530] ============================================
+[19:43:13.535] === Starting AddTodoItem Performance Load Test ===
+[19:43:13.535] Starting performance test with 10000 requests...
+[19:43:13.839] Completed 1000 requests...
+[19:43:14.236] Completed 2000 requests...
+[19:43:14.505] Completed 3000 requests...
+[19:43:14.861] Completed 4000 requests...
+[19:43:15.178] Completed 5000 requests...
+[19:43:15.453] Completed 6000 requests...
+[19:43:15.720] Completed 7000 requests...
+[19:43:16.001] Completed 8000 requests...
+[19:43:16.314] Completed 9000 requests...
+[19:43:16.575] Completed 10000 requests...
+[19:43:16.576] === PERFORMANCE TEST RESULTS ===
+[19:43:16.576] Total Requests: 10000
+[19:43:16.576] Successful Requests: 10000
+[19:43:16.576] Failed Requests: 0
+[19:43:16.576] Total Duration: 3040.77 ms
+[19:43:16.576] Average Response Time: 0.30 ms per request
+[19:43:16.576] Requests per Second: 3288.65
+[19:43:16.576] ================================
+[19:43:16.576] === PERFORMANCE TEST CLEANUP ===
+[19:43:16.576] Disposing HttpClient and cleaning up resources...
+[19:43:16.576] Complete test log saved to: D:\James\PayoneerSubmission\Web_API_Test\TestLogs\Web_API_Performance_Test_AddTodoItemPerformanceLoadTest_20250730_194313.log
+[19:43:16.577] Cleanup completed successfully.
+[19:43:16.577] =================================
+
+================================================================================
+Test Session Completed: 2025-07-30 19:43:16
+================================================================================

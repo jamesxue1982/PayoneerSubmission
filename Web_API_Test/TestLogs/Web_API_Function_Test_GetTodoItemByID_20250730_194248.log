@@ -1,0 +1,53 @@
+﻿================================================================================
+Web API Test Execution Log
+Generated: 2025-07-30 19:42:48
+Machine: DESKTOP-93H19L3
+User: win10
+OS: Microsoft Windows NT 10.0.19045.0
+.NET Runtime: 9.0.7
+Working Directory: D:\James\PayoneerSubmission\Web_API_Test\bin\Debug\net9.0
+================================================================================
+
+[19:42:48.167] === FUNCTION TEST INITIALIZATION ===
+[19:42:48.167] Test Method: GetTodoItemByID
+[19:42:48.167] Building configuration from appsettings files...
+[19:42:48.167] Using API base URL: http://localhost:5089
+[19:42:48.167] Creating HttpClient for API testing...
+[19:42:48.168] Verifying API connectivity...
+[19:42:48.171] API connectivity verified successfully. Status: OK
+[19:42:48.171] Function test initialization completed successfully.
+[19:42:48.171] Test logs will be saved to: D:\James\PayoneerSubmission\Web_API_Test\TestLogs\Web_API_Function_Test_GetTodoItemByID_20250730_194248.log
+[19:42:48.171] ==========================================
+[19:42:48.180] === Starting GetTodoItemByID test ===
+[19:42:48.180] Creating a test TodoItem for retrieval testing...
+[19:42:48.180] Test item payload: Name='Test Item for GET by ID', IsComplete=False
+[19:42:48.182] Response Body: {"id":494,"name":"Test Item for GET by ID","isComplete":false}
+[19:42:48.182] ====================
+[19:42:48.183] ✓ Successfully created test TodoItem with ID: 494
+[19:42:48.183] TEST 1: Retrieving TodoItem by valid ID...
+[19:42:48.186] ✓ Successfully retrieved TodoItem: ID=494, Name='Test Item for GET by ID', IsComplete=False
+[19:42:48.187] TEST 2: Attempting to retrieve TodoItem by invalid/non-existent ID...
+[19:42:48.189] ✓ Correctly returned NotFound for invalid ID: 496
+[19:42:48.189] TEST 3: Security test - Attempting to retrieve TodoItem by word (non-numeric ID)...
+[19:42:48.190] ✓ Correctly rejected non-numeric ID 'someword' with BadRequest status
+[19:42:48.190] TEST 4: Security test - Attempting to retrieve with multiple IDs...
+[19:42:48.191] ✓ Correctly rejected multiple IDs with BadRequest status
+[19:42:48.191] TEST 5: Security test - SQL injection attempt in ID parameter...
+[19:42:48.192] ✓ Successfully blocked SQL injection attempt with BadRequest status
+[19:42:48.192] TEST 6: Security test - Special characters in ID parameter...
+[19:42:48.193] ✓ Correctly rejected special characters '@#!' with BadRequest status
+[19:42:48.193] TEST 7: Security test - Path traversal attempt...
+[19:42:48.194] ✓ Successfully blocked path traversal attempt '../etc/passwd' with NotFound status
+[19:42:48.194] Cleanup: Deleting the test TodoItem with ID: 494
+[19:42:48.197] ✓ Successfully deleted test TodoItem with ID: 494
+[19:42:48.198] GetTodoItemByID test completed successfully.
+[19:42:48.198] ========================================
+[19:42:48.198] === FUNCTION TEST CLEANUP ===
+[19:42:48.198] Disposing HttpClient and cleaning up resources...
+[19:42:48.198] Complete test log saved to: D:\James\PayoneerSubmission\Web_API_Test\TestLogs\Web_API_Function_Test_GetTodoItemByID_20250730_194248.log
+[19:42:48.198] Cleanup completed successfully.
+[19:42:48.198] ==============================
+
+================================================================================
+Test Session Completed: 2025-07-30 19:42:48
+================================================================================

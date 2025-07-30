@@ -1,0 +1,15 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run Tests with TRX Preservation",
+			"type": "shell",
+			"command": "dotnet test --logger \"trx;LogFileName=TestResults_$(Get-Date -Format 'yyyyMMdd_HHmmss').trx\" --results-directory TestResults --settings test.runsettings",
+			"group": "test",
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			]
+		}
+	]
+}

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <!-- Configuration for data collectors -->
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <!-- Data collector for test results -->
+      <DataCollector friendlyName="XPlat code coverage" uri="datacollector://Microsoft/CodeCoverage/2.0" assemblyQualifiedName="Microsoft.VisualStudio.CodeCoverage.DynamicCoverageDataCollector, Microsoft.VisualStudio.CodeCoverage.DynamicCoverageDataCollector">
+        <Configuration>
+          <Format>cobertura</Format>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+
+  <!-- MSTest adapter -->
+  <MSTest>
+    <!-- Keep test results -->
+    <KeepExecutorAliveAfterLegacyRun>true</KeepExecutorAliveAfterLegacyRun>
+  </MSTest>
+
+  <!-- Test run parameters -->
+  <TestRunParameters>
+    <Parameter name="ResultsDirectory" value="TestResults" />
+  </TestRunParameters>
+
+  <!-- Logger configuration -->
+  <LoggerRunSettings>
+    <Loggers>
+      <Logger friendlyName="trx" enabled="True">
+        <!-- No LogFileName specified - TRX logger will auto-generate timestamped name -->
+      </Logger>
+    </Loggers>
+  </LoggerRunSettings>
+
+  <!-- Run configuration -->
+  <RunConfiguration>
+    <!-- Results directory relative to solution -->
+    <ResultsDirectory>.\TestResults</ResultsDirectory>
+    <!-- Don't delete results -->
+    <CollectSourceInformation>true</CollectSourceInformation>
+    <!-- Maximum number of CPU cores to use -->
+    <MaxCpuCount>0</MaxCpuCount>
+  </RunConfiguration>
+</RunSettings>

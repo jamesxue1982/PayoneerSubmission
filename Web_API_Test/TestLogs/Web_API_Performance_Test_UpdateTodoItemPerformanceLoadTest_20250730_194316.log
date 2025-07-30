@@ -1,0 +1,57 @@
+﻿================================================================================
+Web API Test Execution Log
+Generated: 2025-07-30 19:43:16
+Machine: DESKTOP-93H19L3
+User: win10
+OS: Microsoft Windows NT 10.0.19045.0
+.NET Runtime: 9.0.7
+Working Directory: D:\James\PayoneerSubmission\Web_API_Test\bin\Debug\net9.0
+================================================================================
+
+[19:43:16.579] === PERFORMANCE TEST INITIALIZATION ===
+[19:43:16.580] Test Method: UpdateTodoItemPerformanceLoadTest
+[19:43:16.580] Building configuration from appsettings files...
+[19:43:16.580] Using API base URL: http://localhost:5089
+[19:43:16.583] Creating HttpClient for API testing...
+[19:43:16.583] HttpClient configured with base address: http://localhost:5089/
+[19:43:16.583] Verifying API connectivity...
+[19:43:16.588] API connectivity verified successfully. Status: OK
+[19:43:16.588] Performance test initialization completed successfully.
+[19:43:16.588] Test logs will be saved to: D:\James\PayoneerSubmission\Web_API_Test\TestLogs\Web_API_Performance_Test_UpdateTodoItemPerformanceLoadTest_20250730_194316.log
+[19:43:16.588] ============================================
+[19:43:16.608] === Starting UpdateTodoItem Performance Load Test ===
+[19:43:16.609] Starting performance test with 10000 update requests...
+[19:43:16.609] Creating a new TodoItem in the database for testing...
+[19:43:16.612] Successfully created TodoItem with ID: 497 for performance testing
+[19:43:16.612] Act - Update the same TodoItem multiple times for performance testing
+[19:43:18.059] Completed 1000 update requests... (Success rate so far: 100.0%)
+[19:43:19.267] Completed 2000 update requests... (Success rate so far: 100.0%)
+[19:43:20.454] Completed 3000 update requests... (Success rate so far: 100.0%)
+[19:43:21.616] Completed 4000 update requests... (Success rate so far: 100.0%)
+[19:43:22.753] Completed 5000 update requests... (Success rate so far: 100.0%)
+[19:43:24.117] Completed 6000 update requests... (Success rate so far: 100.0%)
+[19:43:25.273] Completed 7000 update requests... (Success rate so far: 100.0%)
+[19:43:26.486] Completed 8000 update requests... (Success rate so far: 100.0%)
+[19:43:27.885] Completed 9000 update requests... (Success rate so far: 100.0%)
+[19:43:29.057] Completed 10000 update requests... (Success rate so far: 100.0%)
+[19:43:29.057] === UPDATE PERFORMANCE TEST RESULTS ===
+[19:43:29.057] Total Update Requests: 10000
+[19:43:29.057] Successful Updates: 10000
+[19:43:29.057] Failed Updates: 0
+[19:43:29.057] Total Duration: 12448.19 ms
+[19:43:29.057] Average Response Time: 1.24 ms per update
+[19:43:29.057] Updates per Second: 803.33
+[19:43:29.057] Success Rate: 100.00%
+[19:43:29.057] =======================================
+[19:43:29.057] Cleaning up: Deleting the test TodoItem...
+[19:43:29.061] Successfully deleted test TodoItem with ID: 497
+[19:43:29.061] UpdateTodoItem Performance Load Test completed successfully.
+[19:43:29.061] === PERFORMANCE TEST CLEANUP ===
+[19:43:29.061] Disposing HttpClient and cleaning up resources...
+[19:43:29.061] Complete test log saved to: D:\James\PayoneerSubmission\Web_API_Test\TestLogs\Web_API_Performance_Test_UpdateTodoItemPerformanceLoadTest_20250730_194316.log
+[19:43:29.061] Cleanup completed successfully.
+[19:43:29.061] =================================
+
+================================================================================
+Test Session Completed: 2025-07-30 19:43:29
+================================================================================

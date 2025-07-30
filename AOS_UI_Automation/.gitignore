@@ -1,0 +1,25 @@
+# Build results
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.vs/
+
+# Test Results
+TestResults/
+*.trx
+
+# Log files
+Logs/
+*.log
+
+# NuGet packages
+packages/
+
+# Visual Studio temporary files
+.vs/
+.vscode/
+
+# Playwright browsers
+playwright/
