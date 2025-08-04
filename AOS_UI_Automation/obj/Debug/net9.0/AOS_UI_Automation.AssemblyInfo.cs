@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AOS_UI_Automation")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2547d58319e544b869a28375f4070b4796562915")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7df771ee047d80d329d76a0463343ac0bceb1472")]
 [assembly: System.Reflection.AssemblyProductAttribute("AOS_UI_Automation")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AOS_UI_Automation")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

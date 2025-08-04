@@ -118,13 +118,11 @@ public class ShoppingCartTests
         // Read data from CSV file
         var csvFilePath = Path.Combine(GetProjectRootDirectory(), "shopping_items.csv");
         var products = ReadShoppingItemsFromCsv(csvFilePath);
-        
+        //stop the test when there's no data in the CSV file
         if (products.Count == 0)
         {
             Assert.Fail("No products loaded from CSV file");
         }
-
-        decimal totalPrice;
 
         _testLogger.WriteLine("Test started: AOS_AddToCart_PriceValidation");
 
@@ -139,8 +137,12 @@ public class ShoppingCartTests
         {
             var product = products[i];
             _testLogger.WriteLine($"Adding {product.Category} product to cart...");
-            var updatedProduct = await AddProductToCartAsync(_page, product.Category.ToString(), product);
-            products[i] = updatedProduct; // Update the list with pricing information
+            decimal individualPrice = await AddProductToCartAsync(_page, product.Category.ToString(), product);
+
+            // Update the product in the list (necessary because Product is a struct)
+            product.IndividualPrice = individualPrice;
+            product.TotalPrice = individualPrice * product.Quantity;
+            products[i] = product; // This line is crucial for structs
         }
 
         _testLogger.WriteLine("Navigating to shopping cart...");
@@ -218,7 +220,7 @@ public class ShoppingCartTests
         // Validate overall cart total price against the sum of individual product totals
         var cartTotalPriceText = await _page.Locator(CART_TOTAL_SELECTOR).InnerTextAsync();
         var cartTotalPrice = ConvertToDecimal(cartTotalPriceText);
-        totalPrice = products.Sum(p => p.TotalPrice);
+        decimal totalPrice = products.Sum(p => p.TotalPrice);
         _testLogger.WriteLine($"\n--- Overall Cart Total Validation ---");
         _testLogger.WriteLine($"Expected total: ${totalPrice}");
         _testLogger.WriteLine($"Cart total: {cartTotalPriceText} (${cartTotalPrice})");
@@ -363,35 +365,33 @@ public class ShoppingCartTests
     /// <param name="product">The product to add</param>
     /// <param name="colorTitle">The color to select</param>
     /// <returns>The updated product with price information</returns>
-    private async Task<Product> AddProductToCartAsync(IPage page, string categoryName, Product product)
+    private async Task<decimal> AddProductToCartAsync(IPage page, string categoryName, Product product)
     {
         _testLogger.WriteLine($"  → Navigating to homepage for {product.Model}");
         await page.GotoAsync(TestConfiguration.Instance.BaseUrl);
 
         _testLogger.WriteLine($"  → Clicking category: {categoryName}");
         await page.GetByRole(AriaRole.Link, new() { Name = categoryName, Exact = true }).ClickAsync();
-        
+
         _testLogger.WriteLine($"  → Selecting product: {product.Model}");
         await page.GetByText(product.Model).ClickAsync();
-        
+
         _testLogger.WriteLine($"  → Selecting color: {product.Color}");
         await page.GetByTitle(product.Color).ClickAsync();
 
         var priceText = await page.Locator(PRICE_SELECTOR).InnerTextAsync();
         _testLogger.WriteLine($"  → Product price: {priceText}");
-        
+        decimal individualPrice = ConvertToDecimal(priceText);
+
         _testLogger.WriteLine($"  → Setting quantity to: {product.Quantity}");
         await page.Locator(QUANTITY_INPUT_SELECTOR).FillAsync(product.Quantity.ToString());
-
-        var updatedProduct = product;
-        updatedProduct.IndividualPrice = ConvertToDecimal(priceText);
-        updatedProduct.TotalPrice = updatedProduct.IndividualPrice * updatedProduct.Quantity;
 
         _testLogger.WriteLine($"  → Adding to cart...");
         await page.GetByRole(AriaRole.Button, new() { Name = "ADD TO CART" }).ClickAsync();
 
-        _testLogger.WriteLine($"  ✅ Added {product.Model} - Qty: {product.Quantity}, Price: ${updatedProduct.IndividualPrice}, Total: ${updatedProduct.TotalPrice}");
-        return updatedProduct;
+        _testLogger.WriteLine($"  ✅ Added {product.Model} - Qty: {product.Quantity}, Price: ${individualPrice}, Total: ${individualPrice}");
+        
+        return individualPrice;
     }
 
     #endregion
