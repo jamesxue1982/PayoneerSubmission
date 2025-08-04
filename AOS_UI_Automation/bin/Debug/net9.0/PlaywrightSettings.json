@@ -3,8 +3,8 @@
   "DefaultTimeout": 30000,
   "BrowserName": "chromium",
   "LaunchOptions": {
-    "Headless": true,
+    "Headless": false,
     "Args": ["--start-maximized", "--disable-web-security", "--disable-features=VizDisplayCompositor"],
-    "SlowMo": 1000
+    "SlowMo": 2000
   }
 }

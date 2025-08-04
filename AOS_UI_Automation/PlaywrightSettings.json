@@ -5,6 +5,6 @@
   "LaunchOptions": {
     "Headless": true,
     "Args": ["--start-maximized", "--disable-web-security", "--disable-features=VizDisplayCompositor"],
-    "SlowMo": 1000
+    "SlowMo": 2000
   }
 }

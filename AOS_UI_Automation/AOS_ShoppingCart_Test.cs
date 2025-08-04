@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using Microsoft.Playwright;
 using System.Diagnostics;
+using System.Net.Http.Headers;
 
 namespace AOS_UI_Automation;
 
@@ -19,12 +20,14 @@ public class ShoppingCartTests
     private IPage? _page;
     private IPlaywright? _playwright;
 
-    #region Constants
+    public enum ProductCategory
+    {
+        LaptopsCategory,
+        MiceCategory,
+        TabletsCategory
+    }
 
-    // Product models
-    private const string LAPTOP_MODEL = "HP ZBook 17 G2 Mobile Workstation";
-    private const string MOUSE_MODEL = "HP Z8000 Bluetooth Mouse";
-    private const string TABLET_MODEL = "HP Elite x2 1011 G1 Tablet";
+    #region Constants
 
     // CSS Selectors
     private const string PRICE_SELECTOR = "#Description > h2";
@@ -112,10 +115,14 @@ public class ShoppingCartTests
     [Category("ShoppingCart")]
     public async Task AOS_AddToCart_PriceValidation()
     {
-        // Arrange: Define test products with their expected quantities
-        var laptop = new Product { Model = LAPTOP_MODEL, Quantity = 1 };
-        var mouse = new Product { Model = MOUSE_MODEL, Quantity = 2 };
-        var tablet = new Product { Model = TABLET_MODEL, Quantity = 1 };
+        // Read data from CSV file
+        var csvFilePath = Path.Combine(GetProjectRootDirectory(), "shopping_items.csv");
+        var products = ReadShoppingItemsFromCsv(csvFilePath);
+        
+        if (products.Count == 0)
+        {
+            Assert.Fail("No products loaded from CSV file");
+        }
 
         decimal totalPrice;
 
@@ -127,17 +134,14 @@ public class ShoppingCartTests
         await Assertions.Expect(_page).ToHaveTitleAsync(new Regex("Advantage Shopping"));
         _testLogger.WriteLine("Successfully navigated to AOS website and verified title");
 
-
-        // Add required products to the cart
-        _testLogger.WriteLine("Adding laptop product to cart...");
-        laptop = await AddProductToCartAsync(_page, "LaptopsCategory", laptop, "BLACK");
-
-        _testLogger.WriteLine("Adding mouse product to cart...");
-        mouse = await AddProductToCartAsync(_page, "MiceCategory", mouse, "BLACK");
-
-        _testLogger.WriteLine("Adding tablet product to cart...");
-        tablet = await AddProductToCartAsync(_page, "TabletsCategory", tablet, "BLACK");
-
+        // Add products from CSV to the cart
+        for (int i = 0; i < products.Count; i++)
+        {
+            var product = products[i];
+            _testLogger.WriteLine($"Adding {product.Category} product to cart...");
+            var updatedProduct = await AddProductToCartAsync(_page, product.Category.ToString(), product);
+            products[i] = updatedProduct; // Update the list with pricing information
+        }
 
         _testLogger.WriteLine("Navigating to shopping cart...");
         await _page.GetByRole(AriaRole.Link, new() { Name = "ShoppingCart" }).ClickAsync();
@@ -150,7 +154,7 @@ public class ShoppingCartTests
         var shoppingCartDiv = _page.Locator(SHOPPING_CART_SELECTOR);
         var productRows = await shoppingCartDiv.Locator(PRODUCT_ROW_SELECTOR).CountAsync();
         _testLogger.WriteLine($"Found {productRows} products in shopping cart");
-        Assert.AreEqual(3, productRows, "Expected exactly 3 products in the cart");
+        Assert.AreEqual(products.Count, productRows, $"Expected exactly {products.Count} products in the cart");
 
         // Validate each product in the cart
         for (int i = 0; i < productRows; i++)
@@ -160,6 +164,19 @@ public class ShoppingCartTests
             // Get product name from this row
             var productName = await row.Locator("label.roboto-regular.productName").InnerTextAsync();
             _testLogger.WriteLine($"\n--- Validating Product {i + 1}: {productName} ---");
+
+            // Get color from this row - color is in the title attribute of the element with class "productColor"
+            var colorElement = row.Locator(".productColor");
+            var cartColor = "";
+            try
+            {
+                cartColor = await colorElement.GetAttributeAsync("title") ?? "";
+                _testLogger.WriteLine($"Cart color: {cartColor}");
+            }
+            catch (Exception ex)
+            {
+                _testLogger.WriteLine($"⚠️ Could not extract color from cart row: {ex.Message}");
+            }
 
             // Get quantity from this row
             var quantityText = await row.Locator("td.smollCell.quantityMobile label.ng-binding").InnerTextAsync();
@@ -171,45 +188,37 @@ public class ShoppingCartTests
             var cartPrice = ConvertToDecimal(cartPriceText);
             _testLogger.WriteLine($"Cart price: {cartPriceText} (${cartPrice})");
 
-            // Validate product details based on product name
-            if (productName.Equals(laptop.Model, StringComparison.OrdinalIgnoreCase))
-            {
-                _testLogger.WriteLine($"Expected laptop quantity: {laptop.Quantity}, Cart quantity: {cartQuantity}");
-                _testLogger.WriteLine($"Expected laptop total: ${laptop.TotalPrice}, Cart total: ${cartPrice}");
+            // Find all matching products from our list (matching both model AND color)
+            var matchingProducts = products.Where(p => 
+                productName.Equals(p.Model, StringComparison.OrdinalIgnoreCase) &&
+                cartColor.Equals(p.Color, StringComparison.OrdinalIgnoreCase)).ToList();
 
-                Assert.AreEqual(laptop.Quantity, cartQuantity, $"Laptop quantity mismatch: expected {laptop.Quantity}, got {cartQuantity}");
-                Assert.AreEqual(laptop.TotalPrice, cartPrice, $"Laptop price mismatch: expected ${laptop.TotalPrice}, got ${cartPrice}");
-                _testLogger.WriteLine("✅ Laptop validation passed");
-            }
-            else if (productName.Equals(mouse.Model, StringComparison.OrdinalIgnoreCase))
+            if (matchingProducts.Any())
             {
-                _testLogger.WriteLine($"Expected mouse quantity: {mouse.Quantity}, Cart quantity: {cartQuantity}");
-                _testLogger.WriteLine($"Expected mouse total: ${mouse.TotalPrice}, Cart total: ${cartPrice}");
+                // Calculate expected total quantity and price for all matching products (same model + color)
+                var expectedQuantity = matchingProducts.Sum(p => p.Quantity);
+                var expectedTotalPrice = matchingProducts.Sum(p => p.TotalPrice);
+                
+                _testLogger.WriteLine($"Expected quantity: {expectedQuantity} (from {matchingProducts.Count} CSV entries with model='{productName}' and color='{cartColor}'), Cart quantity: {cartQuantity}");
+                _testLogger.WriteLine($"Expected total: ${expectedTotalPrice}, Cart total: ${cartPrice}");
 
-                Assert.AreEqual(mouse.Quantity, cartQuantity, $"Mouse quantity mismatch: expected {mouse.Quantity}, got {cartQuantity}");
-                Assert.AreEqual(mouse.TotalPrice, cartPrice, $"Mouse price mismatch: expected ${mouse.TotalPrice}, got ${cartPrice}");
-                _testLogger.WriteLine("✅ Mouse validation passed");
-            }
-            else if (productName.Equals(tablet.Model, StringComparison.OrdinalIgnoreCase))
-            {
-                _testLogger.WriteLine($"Expected tablet quantity: {tablet.Quantity}, Cart quantity: {cartQuantity}");
-                _testLogger.WriteLine($"Expected tablet total: ${tablet.TotalPrice}, Cart total: ${cartPrice}");
-
-                Assert.AreEqual(tablet.Quantity, cartQuantity, $"Tablet quantity mismatch: expected {tablet.Quantity}, got {cartQuantity}");
-                Assert.AreEqual(tablet.TotalPrice, cartPrice, $"Tablet price mismatch: expected ${tablet.TotalPrice}, got ${cartPrice}");
-                _testLogger.WriteLine("✅ Tablet validation passed");
+                Assert.AreEqual(expectedQuantity, cartQuantity, 
+                    $"{matchingProducts.First().Category} quantity mismatch for {productName} ({cartColor}): expected {expectedQuantity}, got {cartQuantity}");
+                Assert.AreEqual(expectedTotalPrice, cartPrice, 
+                    $"{matchingProducts.First().Category} price mismatch for {productName} ({cartColor}): expected ${expectedTotalPrice}, got ${cartPrice}");
+                _testLogger.WriteLine($"✅ {matchingProducts.First().Category} validation passed for {productName} ({cartColor}) - aggregated from {matchingProducts.Count} CSV entries");
             }
             else
             {
-                _testLogger.WriteLine($"❌ Unexpected product found: {productName}");
-                Assert.Fail($"Unexpected product in cart: {productName}");
+                _testLogger.WriteLine($"❌ Unexpected product found: {productName} with color {cartColor}");
+                Assert.Fail($"Unexpected product in cart: {productName} with color {cartColor}");
             }
         }
 
         // Validate overall cart total price against the sum of individual product totals
         var cartTotalPriceText = await _page.Locator(CART_TOTAL_SELECTOR).InnerTextAsync();
         var cartTotalPrice = ConvertToDecimal(cartTotalPriceText);
-        totalPrice = laptop.TotalPrice + mouse.TotalPrice + tablet.TotalPrice;
+        totalPrice = products.Sum(p => p.TotalPrice);
         _testLogger.WriteLine($"\n--- Overall Cart Total Validation ---");
         _testLogger.WriteLine($"Expected total: ${totalPrice}");
         _testLogger.WriteLine($"Cart total: {cartTotalPriceText} (${cartTotalPrice})");
@@ -219,6 +228,112 @@ public class ShoppingCartTests
     }
 
     #region Helper Methods
+
+    /// <summary>
+    /// Reads shopping items from CSV file and returns a list of products.
+    /// </summary>
+    /// <param name="csvFilePath">Path to the CSV file</param>
+    /// <returns>List of products from the CSV file</returns>
+    private List<Product> ReadShoppingItemsFromCsv(string csvFilePath)
+    {
+        var products = new List<Product>();
+        
+        try
+        {
+            _testLogger.WriteLine($"Reading shopping items from: {csvFilePath}");
+            
+            if (!File.Exists(csvFilePath))
+            {
+                throw new FileNotFoundException($"CSV file not found: {csvFilePath}");
+            }
+
+            var lines = File.ReadAllLines(csvFilePath);
+            
+            if (lines.Length < 2) // Must have header + at least one data row
+            {
+                throw new InvalidDataException("CSV file must contain header and at least one product row");
+            }
+
+            // Skip header line and process data rows
+            for (int i = 1; i < lines.Length; i++)
+            {
+                var line = lines[i].Trim();
+                if (string.IsNullOrEmpty(line)) continue; // Skip empty lines
+                
+                var parts = line.Split(',');
+                if (parts.Length < 4)
+                {
+                    _testLogger.WriteLine($"⚠️ Skipping invalid row {i}: {line}");
+                    continue;
+                }
+
+                try
+                {
+                    var categoryString = parts[0].Trim();
+                    var model = parts[1].Trim();
+                    var quantityString = parts[2].Trim();
+                    var colorString = parts[3].Trim();
+
+                    // Parse category enum
+                    if (!Enum.TryParse<ProductCategory>(categoryString, out var category))
+                    {
+                        _testLogger.WriteLine($"⚠️ Invalid category '{categoryString}' in row {i}, skipping");
+                        continue;
+                    }
+
+                    // Parse quantity
+                    if (!int.TryParse(quantityString, out var quantity) || quantity <= 0)
+                    {
+                        _testLogger.WriteLine($"⚠️ Invalid quantity '{quantityString}' in row {i}, skipping");
+                        continue;
+                    }
+
+                    var product = new Product
+                    {
+                        Category = category,
+                        Model = model,
+                        Quantity = quantity,
+                        Color = colorString.Trim(),
+                        IndividualPrice = 0, // Will be populated when adding to cart
+                        TotalPrice = 0 // Will be calculated when adding to cart
+                    };
+
+                    products.Add(product);
+                    _testLogger.WriteLine($"  ✅ Loaded: {category} - {model} (Qty: {quantity})");
+                }
+                catch (Exception ex)
+                {
+                    _testLogger.WriteLine($"⚠️ Error parsing row {i}: {ex.Message}");
+                }
+            }
+
+            _testLogger.WriteLine($"Successfully loaded {products.Count} products from CSV");
+            return products;
+        }
+        catch (Exception ex)
+        {
+            _testLogger.WriteLine($"❌ Error reading CSV file: {ex.Message}");
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// Gets the project root directory by navigating up from current directory until finding .csproj file.
+    /// </summary>
+    /// <returns>The absolute path to the project root directory</returns>
+    private string GetProjectRootDirectory()
+    {
+        var currentDirectory = Directory.GetCurrentDirectory();
+        var directoryInfo = new DirectoryInfo(currentDirectory);
+        
+        // Navigate up until we find the project root (contains .csproj file)
+        while (directoryInfo != null && !directoryInfo.GetFiles("*.csproj").Any())
+        {
+            directoryInfo = directoryInfo.Parent;
+        }
+        
+        return directoryInfo?.FullName ?? currentDirectory;
+    }
 
     /// <summary>
     /// Converts a price string (e.g., "$1,234.56") to a decimal value.
@@ -248,7 +363,7 @@ public class ShoppingCartTests
     /// <param name="product">The product to add</param>
     /// <param name="colorTitle">The color to select</param>
     /// <returns>The updated product with price information</returns>
-    private async Task<Product> AddProductToCartAsync(IPage page, string categoryName, Product product, string colorTitle)
+    private async Task<Product> AddProductToCartAsync(IPage page, string categoryName, Product product)
     {
         _testLogger.WriteLine($"  → Navigating to homepage for {product.Model}");
         await page.GotoAsync(TestConfiguration.Instance.BaseUrl);
@@ -259,8 +374,8 @@ public class ShoppingCartTests
         _testLogger.WriteLine($"  → Selecting product: {product.Model}");
         await page.GetByText(product.Model).ClickAsync();
         
-        _testLogger.WriteLine($"  → Selecting color: {colorTitle}");
-        await page.GetByTitle(colorTitle).ClickAsync();
+        _testLogger.WriteLine($"  → Selecting color: {product.Color}");
+        await page.GetByTitle(product.Color).ClickAsync();
 
         var priceText = await page.Locator(PRICE_SELECTOR).InnerTextAsync();
         _testLogger.WriteLine($"  → Product price: {priceText}");
@@ -287,6 +402,9 @@ public class ShoppingCartTests
 /// </summary>
 public struct Product
 {
+
+    public ShoppingCartTests.ProductCategory Category { get; set; }
+
     /// <summary>
     /// The product model/name as displayed on the website.
     /// </summary>
@@ -296,6 +414,11 @@ public struct Product
     /// The quantity of this product to add to cart.
     /// </summary>
     public int Quantity { get; set; }
+
+    /// <summary>
+    /// The color of the product to select.
+    /// </summary>
+    public string Color { get; set; }
 
     /// <summary>
     /// The individual price of the product as retrieved from the website.
